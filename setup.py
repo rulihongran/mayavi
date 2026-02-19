@@ -2,7 +2,7 @@
 #
 # Copyright (c) 2008-2022 by Enthought, Inc.
 # All rights reserved.
-
+# add comment
 from setuptools import Command, Extension, setup, find_packages
 from setuptools.command.build_py import build_py
 from setuptools.command.develop import develop
