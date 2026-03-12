@@ -59,20 +59,28 @@ spec:
             }
         }
 
+        stage('Upload Repo Code to GCS') {
+            steps {
+                container('gcloud-agent') {
+                    sh """
+                    gsutil -m cp **/*.py gs://mayavi-dataproc-scripts/input/ || true
+                    """
+                }
+            }
+        }
+
         stage('Run Hadoop Job') {
             steps {
                 container('gcloud-agent') {
 
-                    echo "Quality Gate passed. Running Dataproc job..."
-
                     sh """
                     gcloud dataproc jobs submit pyspark \
-                        --cluster=${DATAPROC_CLUSTER} \
-                        --region=${REGION} \
-                        ${GCS_SCRIPT_PATH} \
-                        -- \
-                        gs://mayavi-dataproc-scripts/input \
-                        gs://mayavi-dataproc-scripts/output
+                    --cluster=${DATAPROC_CLUSTER} \
+                    --region=${REGION} \
+                    ${GCS_SCRIPT_PATH} \
+                    -- \
+                    gs://mayavi-dataproc-scripts/input \
+                    gs://mayavi-dataproc-scripts/output
                     """
                 }
             }
