@@ -1,6 +1,7 @@
 pipeline {
     agent {
         kubernetes {
+            cloud 'Kubernetes'
             yaml """
 apiVersion: v1
 kind: Pod
@@ -68,7 +69,10 @@ spec:
                     gcloud dataproc jobs submit pyspark \
                         --cluster=${DATAPROC_CLUSTER} \
                         --region=${REGION} \
-                        ${GCS_SCRIPT_PATH}
+                        ${GCS_SCRIPT_PATH} \
+                        -- \
+                        gs://mayavi-dataproc-scripts/input \
+                        gs://mayavi-dataproc-scripts/output
                     """
                 }
             }
